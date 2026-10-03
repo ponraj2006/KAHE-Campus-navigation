@@ -1,0 +1,351 @@
+/* Widget Wrapper & Floating Launcher Button */
+.kahe-chatbot-wrapper {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 99999;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.kahe-floating-launcher {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #183354;
+  border: 3px solid #ffffff;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(24, 51, 84, 0.4);
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.kahe-floating-launcher:hover {
+  transform: scale(1.08);
+  background: #0f243d;
+}
+
+.launcher-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.launcher-crest {
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* Chat Window Container */
+.kahe-chat-window {
+  position: absolute;
+  bottom: 78px;
+  right: 0;
+  width: 380px;
+  max-width: 90vw;
+  height: 560px;
+  max-height: 82vh;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #dce2e9;
+  animation: slideInUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Chat Header */
+.kahe-chat-header {
+  background: #183354;
+  color: #ffffff;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kahe-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.kahe-header-logo-box {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-radius: 50%;
+}
+
+.kahe-header-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.kahe-header-titles h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.kahe-status {
+  font-size: 12px;
+  color: #c7d2fe;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.online-dot {
+  width: 8px;
+  height: 8px;
+  background: #22c55e;
+  border-radius: 50%;
+}
+
+.kahe-header-actions button {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+
+.kahe-header-actions button:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* Chat Body */
+.kahe-chat-body {
+  flex: 1;
+  padding: 14px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #f8fafc;
+}
+
+/* Quick Action Pills */
+.kahe-pills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.kahe-pill {
+  background: #ffffff;
+  border: 1.5px solid #183354;
+  color: #183354;
+  padding: 6px 12px;
+  border-radius: 18px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.kahe-pill:hover {
+  background: #183354;
+  color: #ffffff;
+}
+
+/* Messages */
+.kahe-message-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.user-row {
+  justify-content: flex-end;
+}
+
+.kahe-bot-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: contain;
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
+.kahe-bubble {
+  max-width: 80%;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  border-radius: 14px;
+}
+
+.bot-bubble {
+  background: #ffffff;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+  border-top-left-radius: 3px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.user-bubble {
+  background: #183354;
+  color: #ffffff;
+  border-top-right-radius: 3px;
+}
+
+.bubble-text {
+  margin: 0;
+}
+
+.bubble-details-list {
+  margin: 8px 0 0 0;
+  padding-left: 18px;
+  font-size: 12.5px;
+  color: #475569;
+}
+
+.bubble-details-list li {
+  margin-bottom: 4px;
+}
+
+.bubble-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.bubble-action-btn {
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  color: #1e3a8a;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.bubble-action-btn:hover {
+  background: #e0e7ff;
+}
+
+.bubble-time {
+  display: block;
+  font-size: 10px;
+  color: #94a3b8;
+  margin-top: 6px;
+  text-align: right;
+}
+
+/* Typing Dots Animation */
+.typing-dots {
+  background: #ffffff;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.typing-dots span {
+  width: 6px;
+  height: 6px;
+  background: #94a3b8;
+  border-radius: 50%;
+  animation: typingBounce 1s infinite alternate;
+}
+
+.typing-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typingBounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-5px);
+  }
+}
+
+/* Chat Input Footer */
+.kahe-chat-footer {
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.kahe-chat-footer input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 13.5px;
+  padding: 6px;
+}
+
+.kahe-footer-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.send-btn {
+  background: #183354;
+  color: #ffffff;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+}
