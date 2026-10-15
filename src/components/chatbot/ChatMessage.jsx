@@ -1,5 +1,5 @@
 import React from "react";
-import collegeLogo from "../../assets/LOGO.png";
+import collegeLogo from "../../../assets/LOGO.png";
 
 export default function ChatMessage({ message, onActionClick }) {
   const isBot = message.sender === "bot";

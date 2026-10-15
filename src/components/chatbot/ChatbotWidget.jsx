@@ -4,8 +4,9 @@ import ChatPills from './ChatPills';
 import ChatMessage from './ChatMessage';
 import TypingIndicator from './TypingIndicator';
 import ChatInput from './ChatInput';
-import { QUICK_PILLS, INITIAL_MESSAGES, getSmartBotResponse } from '../../data/botKnowledge';
-import '../../styles/chatbot.css';
+import { QUICK_PILLS, INITIAL_MESSAGES } from '../../data/chatbotData';
+import { getSmartBotResponse } from '../../services/chatApi';
+import '../../../styles/chatbot.css';
 
 export default function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,19 +41,32 @@ export default function ChatbotWidget() {
     setIsTyping(true);
 
     // Realistic bot response delay
-    const timerId = window.setTimeout(() => {
+    const timerId = window.setTimeout(async () => {
       responseTimersRef.current.delete(timerId);
-      const responseData = getSmartBotResponse(userText);
-      const botMsg = {
-        id: Date.now() + 1,
-        sender: 'bot',
-        text: responseData.text,
-        details: responseData.details,
-        actions: responseData.actions,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-      setMessages((prev) => [...prev, botMsg]);
-      setIsTyping(responseTimersRef.current.size > 0);
+
+      try {
+        const responseData = await getSmartBotResponse(userText);
+        const botMsg = {
+          id: Date.now() + 1,
+          sender: 'bot',
+          text: responseData.text,
+          details: responseData.details,
+          actions: responseData.actions,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+        setMessages((prev) => [...prev, botMsg]);
+      } catch (error) {
+        setMessages((prev) => [...prev, {
+          id: Date.now() + 1,
+          sender: 'bot',
+          text: error.message || 'Sorry, I could not generate a reply right now.',
+          details: [],
+          actions: [],
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }]);
+      } finally {
+        setIsTyping(responseTimersRef.current.size > 0);
+      }
     }, 750);
     responseTimersRef.current.add(timerId);
   };
