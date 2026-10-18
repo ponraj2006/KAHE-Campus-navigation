@@ -1,17 +1,21 @@
 import React from 'react';
 
-export default function ChatPills({ pills, onSelect }) {
+/**
+ * ChatPills - quick questions shown at the top of the chat.
+ * `pills` is an array of strings. Clicking one sends it as a message.
+ */
+export default function ChatPills({ pills = [], onSelect }) {
+  if (pills.length === 0) return null;
+
   return (
-    <div className="kahe-pills-container">
-      {pills.map((pill, idx) => (
-        <button
-          key={idx}
-          className="kahe-pill"
-          onClick={() => onSelect(pill)}
-        >
-          {pill}
-        </button>
+    <ul className="kahe-pills" aria-label="Quick questions">
+      {pills.map(pill => (
+        <li key={pill}>
+          <button type="button" className="kahe-pill" onClick={() => onSelect(pill)}>
+            {pill}
+          </button>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }

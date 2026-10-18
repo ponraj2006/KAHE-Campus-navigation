@@ -7,6 +7,7 @@ import ChatInput from './ChatInput';
 import { QUICK_PILLS, INITIAL_MESSAGES } from '../../data/chatbotData';
 import { getSmartBotResponse } from '../../services/chatApi';
 import '../../../styles/chatbot.css';
+import '../../../styles/chatbot-extras.css'; // staff cards + map button
 
 export default function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,6 +15,10 @@ export default function ChatbotWidget() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
   const responseTimersRef = useRef(new Set());
+
+  // Room number the bot is waiting to place in a block (set when it asks "which block?").
+  // It is sent with the next message so that a click on "S Block" completes the question.
+  const pendingRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -40,22 +45,30 @@ export default function ChatbotWidget() {
     setMessages((prev) => [...prev, userMsg]);
     setIsTyping(true);
 
-    // Realistic bot response delay
+    // Short delay before the request (it was 750 ms; the model's own time is added on top)
     const timerId = window.setTimeout(async () => {
       responseTimersRef.current.delete(timerId);
 
       try {
-        const responseData = await getSmartBotResponse(userText);
+        // Send the saved room number along with the message
+        const responseData = await getSmartBotResponse(userText, pendingRef.current);
+
+        // Save it again only if the bot is still waiting for a block
+        pendingRef.current = responseData.pending || null;
+
         const botMsg = {
           id: Date.now() + 1,
           sender: 'bot',
           text: responseData.text,
           details: responseData.details,
-          actions: responseData.actions,
+          actions: responseData.actions,      // block names -> clickable menu
+          staff: responseData.staff,          // staff contact cards
+          destination: responseData.destination, // Google Maps button
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
         setMessages((prev) => [...prev, botMsg]);
       } catch (error) {
+        pendingRef.current = null;
         setMessages((prev) => [...prev, {
           id: Date.now() + 1,
           sender: 'bot',
@@ -67,13 +80,14 @@ export default function ChatbotWidget() {
       } finally {
         setIsTyping(responseTimersRef.current.size > 0);
       }
-    }, 750);
+    }, 300);
     responseTimersRef.current.add(timerId);
   };
 
   const handleResetChat = () => {
     responseTimersRef.current.forEach((timerId) => window.clearTimeout(timerId));
     responseTimersRef.current.clear();
+    pendingRef.current = null;
     setMessages(INITIAL_MESSAGES);
     setIsTyping(false);
   };
@@ -101,6 +115,7 @@ export default function ChatbotWidget() {
               <ChatMessage
                 key={msg.id}
                 message={msg}
+                isLatest={msg.id === messages[messages.length - 1].id}
                 onActionClick={(actionLabel) => handleSendMessage(actionLabel)}
               />
             ))}

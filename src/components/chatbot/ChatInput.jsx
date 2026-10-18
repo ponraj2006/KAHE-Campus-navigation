@@ -1,30 +1,31 @@
 import React, { useState } from 'react';
 
+/**
+ * ChatInput - text box and send button.
+ */
 export default function ChatInput({ onSend }) {
-  const [text, setText] = useState('');
+  const [value, setValue] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!text.trim()) return;
-    onSend(text);
-    console.log(text)
-    setText('');
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!value.trim()) return;
+    onSend(value);
+    setValue('');
   };
 
   return (
-    <form className="kahe-chat-footer" onSubmit={handleSubmit}>
+    <form className="kahe-input-bar" onSubmit={handleSubmit}>
       <input
-        type="text"
+        className="kahe-input"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder="Try S207, or ask who the HOD is"
         aria-label="Type your question"
-        placeholder="Type your question..."
-        value={text}
-        onChange={(e) => setText(e.target.value)}
+        maxLength={2000}
       />
-      <div className="kahe-footer-icons">
-        <button type="submit" className="send-btn" title="Send message" aria-label="Send message">
-          ➤
-        </button>
-      </div>
+      <button type="submit" className="kahe-send" disabled={!value.trim()}>
+        Send
+      </button>
     </form>
   );
 }

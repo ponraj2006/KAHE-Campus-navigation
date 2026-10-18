@@ -1,43 +1,27 @@
-import React from "react";
-import collegeLogo from "../../../assets/LOGO.png";
+import React from 'react';
 
+/**
+ * ChatHeader - title bar with reset, minimize and close buttons.
+ */
 export default function ChatHeader({ onMinimize, onClose, onReset }) {
   return (
-    <div className="kahe-chat-header">
-      <div className="kahe-header-left">
-        <div className="kahe-header-logo-box">
-          <img
-            className="kahe-header-logo"
-            src={collegeLogo}
-            alt="Karpagam Academy of Higher Education"
-          />
-        </div>
-        <div className="kahe-header-titles">
-          <h3>KAHE Smart Assistant</h3>
-          <span className="kahe-status">
-            <span className="online-dot"></span> online
-          </span>
-        </div>
+    <header className="kahe-chat-header">
+      <div className="kahe-chat-heading">
+        <h2 className="kahe-chat-title">KAHE Campus Assistant</h2>
+        <p className="kahe-chat-subtitle">Find blocks, rooms and staff</p>
       </div>
-      <div className="kahe-header-actions">
-        <button
-          className="kahe-header-btn"
-          onClick={onReset}
-          title="Clear conversation"
-        >
-          ↺
+
+      <div className="kahe-chat-controls">
+        <button type="button" onClick={onReset} aria-label="Start a new chat" title="New chat">
+          New chat
         </button>
-        <button
-          className="kahe-header-btn"
-          onClick={onMinimize}
-          title="Minimize"
-        >
-          —
+        <button type="button" onClick={onMinimize} aria-label="Minimize chat" title="Minimize">
+          &minus;
         </button>
-        <button className="kahe-header-btn" onClick={onClose} title="Close">
-          ✕
+        <button type="button" onClick={onClose} aria-label="Close chat" title="Close">
+          &times;
         </button>
       </div>
-    </div>
+    </header>
   );
 }

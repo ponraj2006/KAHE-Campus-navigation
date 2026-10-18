@@ -1,14 +1,15 @@
-import React from "react";
-import collegeLogo from "../../../assets/LOGO.png";
+import React from 'react';
 
+/**
+ * TypingIndicator - three dots shown while the bot is working on a reply.
+ */
 export default function TypingIndicator() {
   return (
-    <div className="kahe-message-row bot-row typing-row">
-      <img className="kahe-bot-avatar" src={collegeLogo} alt="KAHE" />
-      <div className="typing-dots">
-        <span></span>
-        <span></span>
-        <span></span>
+    <div className="kahe-msg kahe-msg-bot" role="status" aria-label="The assistant is typing">
+      <div className="kahe-bubble kahe-typing">
+        <span className="kahe-dot" />
+        <span className="kahe-dot" />
+        <span className="kahe-dot" />
       </div>
     </div>
   );
