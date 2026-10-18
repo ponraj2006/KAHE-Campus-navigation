@@ -6,6 +6,7 @@ import TypingIndicator from './TypingIndicator';
 import ChatInput from './ChatInput';
 import { QUICK_PILLS, INITIAL_MESSAGES } from '../../data/chatbotData';
 import { getSmartBotResponse } from '../../services/chatApi';
+import kaheLogo from '../../../assets/LOGO.png';
 import '../../../styles/chatbot.css';
 import '../../../styles/chatbot-extras.css'; // staff cards + map button
 
@@ -84,23 +85,13 @@ export default function ChatbotWidget() {
     responseTimersRef.current.add(timerId);
   };
 
-  const handleResetChat = () => {
-    responseTimersRef.current.forEach((timerId) => window.clearTimeout(timerId));
-    responseTimersRef.current.clear();
-    pendingRef.current = null;
-    setMessages(INITIAL_MESSAGES);
-    setIsTyping(false);
-  };
-
   return (
     <div className="kahe-chatbot-wrapper">
       {/* Expanded Chatbot Modal */}
       {isOpen && (
         <div className="kahe-chat-window animate-slide-up">
           <ChatHeader
-            onMinimize={() => setIsOpen(false)}
             onClose={() => setIsOpen(false)}
-            onReset={handleResetChat}
           />
 
           <div className="kahe-chat-body">
@@ -135,8 +126,7 @@ export default function ChatbotWidget() {
         aria-label="Toggle KAHE Assistant"
       >
         <div className="launcher-inner">
-          <span className="launcher-crest">✦</span>
-          <span className="launcher-text">KAHE</span>
+          <img className="launcher-logo" src={kaheLogo} alt="" />
         </div>
       </button>
     </div>

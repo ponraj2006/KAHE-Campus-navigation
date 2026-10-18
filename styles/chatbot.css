@@ -1,22 +1,17 @@
 /*
-  KAHE chatbot styles
-
-  Design idea: campus wayfinding signs. Block choices are signboard tiles with a
-  big amber letter. Everything else stays quiet: teal header, white bubbles.
-
-  Brand colors are variables on .kahe-chatbot-wrapper. Change them here to
-  match the website. chatbot-extras.css (staff cards, map button) reads the same variables.
+  KAHE chatbot styles. chatbot-extras.css (staff cards, map button) shares
+  the color variables defined on .kahe-chatbot-wrapper.
 */
 
 .kahe-chatbot-wrapper {
-  --kahe-accent: #0f4c5c;
-  --kahe-accent-dark: #0a3640;
-  --kahe-gold: #f2b134;
-  --kahe-text: #1b2a30;
-  --kahe-muted: #51666d;
+  --kahe-accent: #183354;
+  --kahe-accent-dark: #102641;
+  --kahe-gold: #dcae45;
+  --kahe-text: #172b3e;
+  --kahe-muted: #657486;
   --kahe-card: #ffffff;
-  --kahe-border: #c3d3d7;
-  --kahe-bg: #eef3f4;
+  --kahe-border: #dce3e9;
+  --kahe-bg: #f5f7f9;
 
   position: fixed;
   right: 1.25rem;
@@ -46,38 +41,40 @@
 /* ---------- Launcher ---------- */
 
 .kahe-floating-launcher {
-  width: 4rem;
-  height: 4rem;
-  padding: 0;
-  border: 3px solid var(--kahe-gold);
+  display: grid;
+  width: 4.25rem;
+  height: 4.25rem;
+  padding: 5px;
+  place-items: center;
+  border: 2px solid var(--kahe-gold);
   border-radius: 50%;
-  background: var(--kahe-accent);
+  background: #fff;
   color: #fff;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(15, 76, 92, 0.35);
+  box-shadow: 0 6px 22px rgba(16, 38, 65, 0.25);
+  transition: transform 160ms ease, box-shadow 160ms ease;
 }
 
 .kahe-floating-launcher:hover {
-  background: var(--kahe-accent-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 9px 26px rgba(16, 38, 65, 0.3);
 }
 
 .launcher-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #fff;
 }
 
-.launcher-crest {
-  color: var(--kahe-gold);
-  font-size: 1rem;
-}
-
-.launcher-text {
-  margin-top: 0.15rem;
-  font-size: 0.8rem;
-  font-weight: 700;
+.launcher-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 /* ---------- Window ---------- */
@@ -85,13 +82,14 @@
 .kahe-chat-window {
   display: flex;
   flex-direction: column;
-  width: min(390px, calc(100vw - 2.5rem));
-  height: min(620px, calc(100dvh - 7rem));
+  width: min(410px, calc(100vw - 2.5rem));
+  height: min(640px, calc(100dvh - 7rem));
+  min-height: 280px;
   overflow: hidden;
   border: 1px solid var(--kahe-border);
-  border-radius: 12px;
+  border-radius: 18px;
   background: var(--kahe-bg);
-  box-shadow: 0 10px 30px rgba(15, 40, 50, 0.25);
+  box-shadow: 0 22px 64px rgba(16, 38, 65, 0.24), 0 4px 14px rgba(16, 38, 65, 0.08);
 }
 
 /* One entrance when the window opens */
@@ -116,80 +114,125 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border-bottom: 3px solid var(--kahe-gold);
   background: var(--kahe-accent);
   color: #fff;
 }
 
+.kahe-chat-heading {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.kahe-chat-logo-wrap {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.kahe-chat-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.kahe-chat-brand {
+  min-width: 0;
+}
+
 .kahe-chat-title {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: 0.98rem;
   font-weight: 700;
+  line-height: 1.3;
 }
 
 .kahe-chat-subtitle {
-  margin: 0;
-  font-size: 0.8rem;
-  color: #cfe3e8;
+  margin: 0.15rem 0 0;
+  color: #d5e0eb;
+  font-size: 0.76rem;
+  line-height: 1.35;
 }
 
 .kahe-chat-controls {
   display: flex;
-  gap: 0.3rem;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .kahe-chat-controls button {
-  min-width: 2rem;
-  padding: 0.25rem 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  border-radius: 6px;
-  background: transparent;
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.08);
   color: #fff;
   font-size: 0.85rem;
   cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease;
 }
 
 .kahe-chat-controls button:hover {
-  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.17);
 }
 
 /* ---------- Body and messages ---------- */
 
 .kahe-chat-body {
+  min-height: 0;
   flex: 1;
   overflow-y: auto;
-  padding: 0.8rem 0.8rem 0.4rem;
+  padding: 1rem 0.9rem 0.55rem;
+  scroll-behavior: smooth;
+  scrollbar-color: #c4ced8 transparent;
+  scrollbar-width: thin;
 }
 
 .kahe-pills {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin: 0 0 0.9rem;
+  gap: 0.45rem;
+  margin: 0 0 1rem;
   padding: 0;
   list-style: none;
 }
 
 .kahe-pill {
-  padding: 0.35rem 0.7rem;
-  border: 1.5px solid var(--kahe-accent);
+  padding: 0.4rem 0.75rem;
+  border: 1px solid #cfd9e2;
   border-radius: 999px;
   background: var(--kahe-card);
   color: var(--kahe-accent);
   font-size: 0.85rem;
   cursor: pointer;
+  transition: border-color 150ms ease, background-color 150ms ease, transform 150ms ease;
 }
 
 .kahe-pill:hover {
-  background: #e3eef0;
+  transform: translateY(-1px);
+  border-color: var(--kahe-accent);
+  background: #edf2f7;
 }
 
 .kahe-msg {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  margin-bottom: 0.9rem;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
 }
 
 .kahe-msg-bot {
@@ -202,21 +245,24 @@
 
 .kahe-bubble {
   max-width: 88%;
-  padding: 0.6rem 0.85rem;
-  border-radius: 12px;
+  padding: 0.7rem 0.9rem;
+  border-radius: 15px;
   overflow-wrap: anywhere;
+  line-height: 1.55;
 }
 
 .kahe-msg-bot .kahe-bubble {
   background: var(--kahe-card);
-  border: 1px solid var(--kahe-border);
-  border-top-left-radius: 3px;
+  border: 1px solid #e1e6eb;
+  border-top-left-radius: 5px;
+  box-shadow: 0 2px 8px rgba(23, 43, 62, 0.035);
 }
 
 .kahe-msg-user .kahe-bubble {
   background: var(--kahe-accent);
   color: #fff;
-  border-top-right-radius: 3px;
+  border-top-right-radius: 5px;
+  box-shadow: 0 3px 10px rgba(24, 51, 84, 0.13);
 }
 
 .kahe-bubble-text {
@@ -231,8 +277,9 @@
 }
 
 .kahe-time {
-  font-size: 0.72rem;
+  padding: 0 0.2rem;
   color: var(--kahe-muted);
+  font-size: 0.7rem;
 }
 
 /* ---------- Typing dots ---------- */
@@ -240,7 +287,10 @@
 .kahe-typing {
   display: flex;
   gap: 0.3rem;
-  padding: 0.7rem 0.9rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--kahe-border);
+  border-radius: 14px;
+  background: #fff;
 }
 
 .kahe-dot {
@@ -272,7 +322,7 @@
 
 .kahe-actions {
   display: grid;
-  gap: 0.45rem;
+  gap: 0.5rem;
   width: 100%;
   margin: 0;
   padding: 0;
@@ -284,56 +334,62 @@
   align-items: stretch;
   width: 100%;
   padding: 0;
-  border: 2px solid var(--kahe-accent);
-  border-radius: 6px;
+  border: 1px solid #d6dfe7;
+  border-radius: 10px;
   background: var(--kahe-card);
   color: var(--kahe-text);
   text-align: left;
   cursor: pointer;
   overflow: hidden;
+  transition: border-color 150ms ease, background-color 150ms ease, transform 150ms ease;
 }
 
 .kahe-tile:hover {
-  background: #e3eef0;
+  transform: translateY(-1px);
+  border-color: var(--kahe-accent);
+  background: #f5f8fb;
 }
 
 .kahe-tile-letter {
   display: grid;
   place-items: center;
-  flex: 0 0 2.9rem;
+  flex: 0 0 2.8rem;
   background: var(--kahe-gold);
   color: var(--kahe-text);
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: 700;
 }
 
 .kahe-tile-label {
-  padding: 0.6rem 0.8rem;
+  padding: 0.65rem 0.8rem;
   font-weight: 700;
 }
 
 .kahe-action {
   width: 100%;
-  padding: 0.5rem 0.8rem;
-  border: 1.5px solid var(--kahe-accent);
-  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #d6dfe7;
+  border-radius: 9px;
   background: var(--kahe-card);
   color: var(--kahe-accent);
   font-weight: 700;
   text-align: left;
   cursor: pointer;
+  transition: border-color 150ms ease, background-color 150ms ease, transform 150ms ease;
 }
 
 .kahe-action:hover {
-  background: #e3eef0;
+  transform: translateY(-1px);
+  border-color: var(--kahe-accent);
+  background: #f5f8fb;
 }
 
 /* ---------- Input bar ---------- */
 
 .kahe-input-bar {
   display: flex;
-  gap: 0.5rem;
-  padding: 0.7rem 0.8rem;
+  gap: 0.55rem;
+  padding: 0.75rem 0.8rem;
   border-top: 1px solid var(--kahe-border);
   background: var(--kahe-card);
 }
@@ -341,21 +397,39 @@
 .kahe-input {
   flex: 1;
   min-width: 0;
-  padding: 0.55rem 0.75rem;
-  border: 1.5px solid var(--kahe-border);
-  border-radius: 6px;
-  background: var(--kahe-card);
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--kahe-border);
+  border-radius: 11px;
+  background: #f8fafc;
   color: var(--kahe-text);
+  transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+}
+
+.kahe-input::placeholder {
+  color: #7c8997;
+}
+
+.kahe-input:focus {
+  border-color: var(--kahe-accent);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(24, 51, 84, 0.1);
+  outline: none;
 }
 
 .kahe-send {
-  padding: 0.55rem 0.95rem;
-  border: 1.5px solid var(--kahe-accent);
-  border-radius: 6px;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--kahe-accent);
+  border-radius: 11px;
   background: var(--kahe-accent);
   color: #fff;
   font-weight: 700;
   cursor: pointer;
+  transition: background-color 150ms ease, transform 150ms ease;
+}
+
+.kahe-send:not(:disabled):hover {
+  transform: translateY(-1px);
+  background: var(--kahe-accent-dark);
 }
 
 .kahe-send:disabled {
@@ -373,6 +447,10 @@
   outline-offset: 2px;
 }
 
+.kahe-chatbot-wrapper button:disabled {
+  cursor: not-allowed;
+}
+
 /* ---------- Small screens ---------- */
 
 @media (max-width: 480px) {
@@ -384,14 +462,56 @@
   .kahe-chat-window {
     width: calc(100vw - 1.5rem);
     height: calc(100dvh - 6rem);
+    max-height: 640px;
+    border-radius: 16px;
   }
+
+  .kahe-chat-header {
+    gap: 0.45rem;
+    padding: 0.75rem;
+  }
+
+  .kahe-chat-heading {
+    gap: 0.5rem;
+  }
+
+  .kahe-chat-logo-wrap {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+    border-radius: 10px;
+  }
+
+  .kahe-chat-title {
+    font-size: 0.86rem;
+  }
+
+  .kahe-chat-subtitle {
+    font-size: 0.7rem;
+  }
+
+  .kahe-chat-controls {
+    gap: 0.25rem;
+  }
+
+  .kahe-chat-controls button {
+    min-width: 1.9rem;
+    min-height: 2rem;
+    padding: 0.25rem 0.4rem;
+    font-size: 0.75rem;
+  }
+
 }
 
 /* ---------- Respect reduced motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {
   .animate-slide-up,
-  .kahe-dot {
+  .kahe-dot,
+  .kahe-floating-launcher,
+  .kahe-chatbot-wrapper button,
+  .kahe-chatbot-wrapper input {
     animation: none;
+    transition: none;
   }
 }
