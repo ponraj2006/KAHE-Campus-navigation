@@ -13,7 +13,7 @@ export default function ChatHeader({ onClose }) {
         </span>
         <span className="kahe-chat-brand">
           <h2 className="kahe-chat-title">KAHE Campus Assistant</h2>
-          <p className="kahe-chat-subtitle">Find blocks, rooms and staff</p>
+          <p className="kahe-chat-subtitle">Student support</p>
         </span>
       </div>
 

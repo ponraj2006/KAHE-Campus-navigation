@@ -6,7 +6,7 @@ import TypingIndicator from './TypingIndicator';
 import ChatInput from './ChatInput';
 import { QUICK_PILLS, INITIAL_MESSAGES } from '../../data/chatbotData';
 import { getSmartBotResponse } from '../../services/chatApi';
-import kaheLogo from '../../../assets/LOGO.png';
+import chatbot_logo from '../../../assets/Chatbot_logo.jpg';
 import '../../../styles/chatbot.css';
 import '../../../styles/chatbot-extras.css'; // staff cards + map button
 
@@ -16,6 +16,8 @@ export default function ChatbotWidget() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
   const responseTimersRef = useRef(new Set());
+  const activeRequestsRef = useRef(0);
+  const messageIdRef = useRef(INITIAL_MESSAGES.length + 1);
 
   // Room number the bot is waiting to place in a block (set when it asks "which block?").
   // It is sent with the next message so that a click on "S Block" completes the question.
@@ -37,11 +39,15 @@ export default function ChatbotWidget() {
     if (!userText.trim()) return;
 
     const userMsg = {
-      id: Date.now(),
+      id: messageIdRef.current++,
       sender: 'user',
       text: userText,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
+    const history = [...messages, userMsg].map((message) => ({
+      role: message.sender === 'user' ? 'user' : 'assistant',
+      content: message.text
+    }));
 
     setMessages((prev) => [...prev, userMsg]);
     setIsTyping(true);
@@ -49,16 +55,17 @@ export default function ChatbotWidget() {
     // Short delay before the request (it was 750 ms; the model's own time is added on top)
     const timerId = window.setTimeout(async () => {
       responseTimersRef.current.delete(timerId);
+      activeRequestsRef.current += 1;
 
       try {
         // Send the saved room number along with the message
-        const responseData = await getSmartBotResponse(userText, pendingRef.current);
+        const responseData = await getSmartBotResponse(userText, pendingRef.current, history);
 
         // Save it again only if the bot is still waiting for a block
         pendingRef.current = responseData.pending || null;
 
         const botMsg = {
-          id: Date.now() + 1,
+          id: messageIdRef.current++,
           sender: 'bot',
           text: responseData.text,
           details: responseData.details,
@@ -71,7 +78,7 @@ export default function ChatbotWidget() {
       } catch (error) {
         pendingRef.current = null;
         setMessages((prev) => [...prev, {
-          id: Date.now() + 1,
+          id: messageIdRef.current++,
           sender: 'bot',
           text: error.message || 'Sorry, I could not generate a reply right now.',
           details: [],
@@ -79,7 +86,10 @@ export default function ChatbotWidget() {
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }]);
       } finally {
-        setIsTyping(responseTimersRef.current.size > 0);
+        activeRequestsRef.current -= 1;
+        setIsTyping(
+          activeRequestsRef.current > 0 || responseTimersRef.current.size > 0
+        );
       }
     }, 300);
     responseTimersRef.current.add(timerId);
@@ -99,6 +109,7 @@ export default function ChatbotWidget() {
             <ChatPills
               pills={QUICK_PILLS}
               onSelect={(pillText) => handleSendMessage(pillText)}
+              disabled={isTyping}
             />
 
             {/* Conversation Flow */}
@@ -108,6 +119,7 @@ export default function ChatbotWidget() {
                 message={msg}
                 isLatest={msg.id === messages[messages.length - 1].id}
                 onActionClick={(actionLabel) => handleSendMessage(actionLabel)}
+                actionsDisabled={isTyping}
               />
             ))}
 
@@ -115,7 +127,7 @@ export default function ChatbotWidget() {
             <div ref={messagesEndRef} />
           </div>
 
-          <ChatInput onSend={handleSendMessage} />
+          <ChatInput onSend={handleSendMessage} disabled={isTyping} />
         </div>
       )}
 
@@ -126,7 +138,7 @@ export default function ChatbotWidget() {
         aria-label="Toggle KAHE Assistant"
       >
         <div className="launcher-inner">
-          <img className="launcher-logo" src={kaheLogo} alt="" />
+          <img className="launcher-logo" src={chatbot_logo} alt="" />
         </div>
       </button>
     </div>

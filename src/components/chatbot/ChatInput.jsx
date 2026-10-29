@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 /**
  * ChatInput - text box and send button.
  */
-export default function ChatInput({ onSend }) {
+export default function ChatInput({ onSend, disabled = false }) {
   const [value, setValue] = useState('');
 
   const handleSubmit = (event) => {
@@ -22,8 +22,13 @@ export default function ChatInput({ onSend }) {
         placeholder="Try S207, or ask who the HOD is"
         aria-label="Type your question"
         maxLength={2000}
+        disabled={disabled}
       />
-      <button type="submit" className="kahe-send" disabled={!value.trim()}>
+      <button
+        type="submit"
+        className="kahe-send"
+        disabled={disabled || !value.trim()}
+      >
         Send
       </button>
     </form>

@@ -1,8 +1,13 @@
 import React from 'react';
 import ChatbotWidget from './src/components/chatbot/ChatbotWidget';
+import AdminPanel from './src/components/admin/AdminPanel';
 import './styles/App.css';
 
 export default function App() {
+  if (window.location.pathname.replace(/\/+$/, '') === '/admin') {
+    return <AdminPanel />;
+  }
+
   return (
     <div className="kahe-app">
       {/* Announcement Bar */}
@@ -20,7 +25,6 @@ export default function App() {
           </div>
         </div>
         <nav className="site-nav">
-          <a href="#about">About</a>
           <a href="#about">About</a>
           <a href="#at-a-glance">At a glance</a>
           <a href="mailto:info@kahedu.edu.in?subject=Admissions%20Enquiry">Admissions</a>

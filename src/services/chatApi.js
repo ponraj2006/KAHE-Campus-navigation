@@ -1,7 +1,7 @@
 
-const API_URL = (import.meta.env.VITE_API_URL || "http://127.0.0.1:5000").replace(/\/+$/, "");
+const API_URL = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
 
-export async function getSmartBotResponse(userQuery) {
+export async function getSmartBotResponse(userQuery, pending = null, history = []) {
   const trimmedQuery = typeof userQuery === "string" ? userQuery.trim() : "";
 
   if (!trimmedQuery) {
@@ -9,7 +9,6 @@ export async function getSmartBotResponse(userQuery) {
   }
 
   let response;
-
   try {
     response = await fetch(`${API_URL}/api/chat`, {
       method: "POST",
@@ -17,41 +16,41 @@ export async function getSmartBotResponse(userQuery) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        message: trimmedQuery
+        message: trimmedQuery,
+        pending,
+        history
       })
     });
-  } catch (error) {
+  } catch {
     throw new Error("Unable to contact KAHE Assistant. Please try again later.");
   }
 
-  let data = {};
-
-  try {
-    data = await response.json();
-  } catch (error) {
-    data = {};
-  }
+  const data = await response.json().catch(() => null);
 
   if (!response.ok) {
-    throw new Error(data.error || data.message || "Unable to contact KAHE Assistant.");
+    throw new Error(data?.error || data?.message || "Unable to contact KAHE Assistant.");
   }
 
-  const destination = data.destination && typeof data.destination === "object" ? data.destination : null;
-  const mapsUrl = destination?.mapsUrl || null;
+  if (!data || typeof data !== "object") {
+    throw new Error("The assistant returned an invalid response. Please try again.");
+  }
+
+  const options = Array.isArray(data.options)
+    ? data.options.filter(option => option && typeof option.label === "string")
+    : [];
 
   return {
-    text: typeof data.answer === "string" && data.answer.trim() ? data.answer : "I’m here to help with campus navigation.",
+    text: typeof data.answer === "string" && data.answer.trim()
+      ? data.answer
+      : "I’m here to help with campus navigation.",
     details: Array.isArray(data.details) ? data.details : [],
-    actions: mapsUrl
-      ? [
-          {
-            label: "Open Directions in Google Maps",
-            link: mapsUrl
-          }
-        ]
-      : [],
-    intent: data.type || "rag",
+    actions: options.map(option => option.label),
+    staff: Array.isArray(data.staff) ? data.staff : [],
+    destination: data.destination && typeof data.destination === "object"
+      ? data.destination
+      : null,
+    type: data.type || "rag",
     sources: Array.isArray(data.sources) ? data.sources : [],
-    destination
+    pending: data.type === "clarify" ? data.pending : null
   };
 }

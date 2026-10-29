@@ -1,4 +1,77 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+function StaffPhoto({ person }) {
+  const [hasError, setHasError] = useState(false);
+  const initials = String(person.name || '?')
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map(part => part[0])
+    .join('')
+    .toUpperCase();
+
+  return (
+    <span className="kahe-staff-photo">
+      {person.image && !hasError
+        ? <img src={person.image} alt="" onError={() => setHasError(true)} />
+        : <span className="kahe-staff-initials">{initials}</span>}
+    </span>
+  );
+}
+
+function StaffCard({ person }) {
+  const metadata = [
+    ['Qualification', person.qualification],
+    ['Teaching experience', person.teachingExperience],
+    ['Research experience', person.researchExperience],
+    ['Specialization', person.specialization],
+    ['Publications', person.publications],
+    ['Scopus', person.scopus],
+    ['Peer reviewed', person.peerReviewed],
+    ['Ph.D produced', person.phdProduced],
+    ['Ph.D guiding', person.phdGuiding]
+  ].filter(([, value]) => value);
+
+  return (
+    <li className="kahe-staff-card">
+      <StaffPhoto person={person} />
+      <div className="kahe-staff-info">
+        <p className="kahe-staff-name">{person.name}</p>
+
+        {(person.designation || person.department) && (
+          <p className="kahe-staff-role">
+            {[person.designation, person.department].filter(Boolean).join(', ')}
+          </p>
+        )}
+
+        {(person.building || person.room) && (
+          <p className="kahe-staff-where">
+            {[person.building, person.room && `Room ${person.room}`]
+              .filter(Boolean)
+              .join(', ')}
+          </p>
+        )}
+
+        {metadata.length > 0 && (
+          <ul className="kahe-staff-meta">
+            {metadata.map(([label, value]) => (
+              <li key={label}><strong>{label}:</strong> {value}</li>
+            ))}
+          </ul>
+        )}
+
+        {(person.phone || person.email) && (
+          <p className="kahe-staff-contact">
+            {person.phone && (
+              <a href={`tel:${String(person.phone).replace(/\s+/g, '')}`}>{person.phone}</a>
+            )}
+            {person.email && <a href={`mailto:${person.email}`}>{person.email}</a>}
+          </p>
+        )}
+      </div>
+    </li>
+  );
+}
 
 /**
  * BotExtras - staff contact cards and the "Open in Google Maps" button.
@@ -22,30 +95,7 @@ export default function BotExtras({ message }) {
       {staff.length > 0 && (
         <ul className="kahe-staff-list">
           {staff.map((person, index) => (
-            <li key={`${person.name}-${index}`} className="kahe-staff-card">
-              <p className="kahe-staff-name">{person.name}</p>
-
-              <p className="kahe-staff-role">
-                {[person.designation, person.department].filter(Boolean).join(', ')}
-              </p>
-
-              {(person.building || person.room) && (
-                <p className="kahe-staff-where">
-                  {[person.building, person.room && `Room ${person.room}`]
-                    .filter(Boolean)
-                    .join(', ')}
-                </p>
-              )}
-
-              {(person.phone || person.email) && (
-                <p className="kahe-staff-contact">
-                  {person.phone && (
-                    <a href={`tel:${person.phone.replace(/\s+/g, '')}`}>{person.phone}</a>
-                  )}
-                  {person.email && <a href={`mailto:${person.email}`}>{person.email}</a>}
-                </p>
-              )}
-            </li>
+            <StaffCard key={`${person.name}-${index}`} person={person} />
           ))}
         </ul>
       )}

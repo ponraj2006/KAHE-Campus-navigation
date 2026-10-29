@@ -15,7 +15,12 @@ const BLOCK_LABEL = /^([A-Za-z]) Block$/i;
  *   onActionClick  called with the action label when a menu button is clicked
  *   isLatest       true only for the newest message, so old menus disappear
  */
-export default function ChatMessage({ message, onActionClick, isLatest = true }) {
+export default function ChatMessage({
+  message,
+  onActionClick,
+  isLatest = true,
+  actionsDisabled = false
+}) {
   const isBot = message.sender === 'bot';
   const details = Array.isArray(message.details) ? message.details : [];
   const actions = Array.isArray(message.actions) ? message.actions : [];
@@ -52,6 +57,7 @@ export default function ChatMessage({ message, onActionClick, isLatest = true })
                   type="button"
                   className={block ? 'kahe-tile' : 'kahe-action'}
                   onClick={() => onActionClick(label)}
+                  disabled={actionsDisabled}
                 >
                   {block && (
                     <span className="kahe-tile-letter" aria-hidden="true">
